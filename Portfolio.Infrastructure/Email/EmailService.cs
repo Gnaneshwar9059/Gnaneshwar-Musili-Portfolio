@@ -21,51 +21,12 @@ public class EmailService : IEmailService
 
     public async Task SendAsync(string subject, string body)
     {
-        try
-        {
-            var email = new MimeMessage();
+        Console.WriteLine("EmailService reached.");
 
-            email.From.Add(MailboxAddress.Parse(_settings.From));
-            email.To.Add(MailboxAddress.Parse(_settings.Username));
+        await Task.Delay(1000);
 
-            email.To.Add(MailboxAddress.Parse(_settings.Username));
+        Console.WriteLine("EmailService completed.");
 
-            email.Subject = subject;
-
-            email.Body = new TextPart("html")
-            {
-                Text = body
-            };
-
-            using var smtp = new SmtpClient();
-
-            smtp.ServerCertificateValidationCallback = (_, _, _, _) => true;
-
-            Console.WriteLine($"HOST = {_settings.Host}");
-            Console.WriteLine($"PORT = {_settings.Port}");
-            Console.WriteLine($"FROM = {_settings.From}");
-            Console.WriteLine($"USER = {_settings.Username}");
-            Console.WriteLine($"PASSWORD EMPTY = {string.IsNullOrWhiteSpace(_settings.Password)}");
-
-            await smtp.ConnectAsync(
-                _settings.Host,
-                _settings.Port,
-                SecureSocketOptions.StartTls);
-
-            await smtp.AuthenticateAsync(
-                _settings.Username,
-                _settings.Password);
-
-            await smtp.SendAsync(email);
-
-            await smtp.DisconnectAsync(true);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("EMAIL ERROR:");
-            Console.WriteLine(ex);
-
-            throw;
-        }
+        return;
     }
 }
