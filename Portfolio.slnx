@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
+    <File Path="Dockerfile" />
+  </Folder>
   <Project Path="Portfolio.Infrastructure/Portfolio.Infrastructure.csproj" />
   <Project Path="Portfolio.Services/Portfolio.Services.csproj" />
   <Project Path="Portfolio.Shared/Portfolio.Shared.csproj" />
