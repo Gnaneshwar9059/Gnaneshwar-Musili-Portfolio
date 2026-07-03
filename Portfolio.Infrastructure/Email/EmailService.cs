@@ -41,6 +41,12 @@ public class EmailService : IEmailService
 
             smtp.ServerCertificateValidationCallback = (_, _, _, _) => true;
 
+            Console.WriteLine($"HOST = {_settings.Host}");
+            Console.WriteLine($"PORT = {_settings.Port}");
+            Console.WriteLine($"FROM = {_settings.From}");
+            Console.WriteLine($"USER = {_settings.Username}");
+            Console.WriteLine($"PASSWORD EMPTY = {string.IsNullOrWhiteSpace(_settings.Password)}");
+
             await smtp.ConnectAsync(
                 _settings.Host,
                 _settings.Port,
