@@ -11,6 +11,13 @@ WORKDIR /src
 
 COPY . .
 
+# Build Angular
+WORKDIR /src/Portfolio/ClientApp
+
+RUN npm install
+RUN npm run build
+
+# Publish .NET
 WORKDIR /src/Portfolio
 
 RUN dotnet publish -c Release -o /app/publish
