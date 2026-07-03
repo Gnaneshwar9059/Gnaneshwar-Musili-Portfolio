@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>181c68e9-5e55-4671-85b9-63feb74b95ad</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Portfolio.Services\Portfolio.Services.csproj" />
+    <ProjectReference Include="..\Portfolio.Shared\Portfolio.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\environments\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Middleware\" />
+  </ItemGroup>
+
+<Target Name="BuildAngular" BeforeTargets="Build">
+
+        <Exec WorkingDirectory="ClientApp" Command="npm install" />
+
+		<Exec WorkingDirectory="ClientApp" Command="npm run build" />
+
+ </Target>
+
+</Project>
