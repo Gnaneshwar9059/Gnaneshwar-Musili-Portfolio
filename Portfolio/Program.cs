@@ -14,10 +14,10 @@ builder.Services.AddPortfolioServices(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AngularPolicy", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
         policy
-            .WithOrigins("http://localhost:4200")
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -30,7 +30,7 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseCors("AngularPolicy");
+app.UseCors("AllowAll");
 
 
 

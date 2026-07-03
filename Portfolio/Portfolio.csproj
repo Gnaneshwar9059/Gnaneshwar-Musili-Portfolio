@@ -25,12 +25,12 @@
     <Folder Include="Middleware\" />
   </ItemGroup>
 
-<Target Name="BuildAngular" BeforeTargets="Build">
+<Target Name="BuildAngular" BeforeTargets="Publish">
 
-        <Exec WorkingDirectory="ClientApp" Command="npm install" />
+    <Exec WorkingDirectory="ClientApp" Command="npm install" />
 
-		<Exec WorkingDirectory="ClientApp" Command="npm run build" />
+    <Exec WorkingDirectory="ClientApp" Command="npm run build" />
 
- </Target>
+</Target>
 
 </Project>
