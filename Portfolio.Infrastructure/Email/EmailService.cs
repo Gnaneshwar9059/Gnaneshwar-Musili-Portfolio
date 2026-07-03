@@ -21,34 +21,45 @@ public class EmailService : IEmailService
 
     public async Task SendAsync(string subject, string body)
     {
-        var email = new MimeMessage();
-
-        email.From.Add(MailboxAddress.Parse(_settings.From));
-        email.To.Add(MailboxAddress.Parse(_settings.Username));
-
-        email.Subject = subject;
-
-        email.Body = new TextPart("html")
+        try
         {
-            Text = body
-        };
+            var email = new MimeMessage();
 
-        using var smtp = new SmtpClient();
+            email.From.Add(MailboxAddress.Parse(_settings.From));
+            email.To.Add(MailboxAddress.Parse(_settings.Username));
 
-        smtp.ServerCertificateValidationCallback = (_, _, _, _) => true;
+            email.To.Add(MailboxAddress.Parse(_settings.Username));
 
+            email.Subject = subject;
 
-        await smtp.ConnectAsync(
-            _settings.Host,
-            _settings.Port,
-            SecureSocketOptions.StartTls);
+            email.Body = new TextPart("html")
+            {
+                Text = body
+            };
 
-        await smtp.AuthenticateAsync(
-            _settings.Username,
-            _settings.Password);
+            using var smtp = new SmtpClient();
 
-        await smtp.SendAsync(email);
+            smtp.ServerCertificateValidationCallback = (_, _, _, _) => true;
 
-        await smtp.DisconnectAsync(true);
+            await smtp.ConnectAsync(
+                _settings.Host,
+                _settings.Port,
+                SecureSocketOptions.StartTls);
+
+            await smtp.AuthenticateAsync(
+                _settings.Username,
+                _settings.Password);
+
+            await smtp.SendAsync(email);
+
+            await smtp.DisconnectAsync(true);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("EMAIL ERROR:");
+            Console.WriteLine(ex);
+
+            throw;
+        }
     }
 }
