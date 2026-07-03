@@ -1,0 +1,141 @@
+.contact-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0px 20px;
+}
+
+  .contact-section h2 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .contact-section p {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--secondary-text-color);
+  }
+
+.contact-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+  .form-group:nth-child(5),
+  .form-group:nth-child(6) {
+    grid-column: 1 / -1;
+  }
+
+label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-color);
+  transition: .25s;
+}
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--secondary-text-color);
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+  }
+
+textarea {
+  resize: vertical;
+}
+
+.invalid {
+  border: 2px solid #ef4444 !important;
+}
+
+.error {
+  color: #ef4444;
+  font-size: .85rem;
+  margin-top: 5px;
+}
+
+button {
+  grid-column: 1/-1;
+  justify-self: center;
+  width: 220px;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: .3s;
+}
+
+  button:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+  }
+
+.success-message,
+.error-message {
+  grid-column: 1/-1;
+  text-align: center;
+}
+
+.success-message {
+  color: #22c55e;
+}
+
+.error-message {
+  color: #ef4444;
+}
+
+
+/* ---------- Chrome Autofill Fix ---------- */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--text-color);
+  -webkit-box-shadow: 0 0 0px 1000px var(--card-bg) inset;
+  transition: background-color 99999s ease-in-out 0s;
+  caret-color: var(--text-color);
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media(max-width:768px) {
+
+  .contact-form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group:nth-child(5),
+  .form-group:nth-child(6) {
+    grid-column: auto;
+  }
+}

@@ -1,0 +1,70 @@
+<nav class="navbar">
+
+  <a class="logo"
+     href="#hero"
+     (click)="closeMenu()">
+
+    GM
+
+  </a>
+
+  <ul class="nav-links"
+      [class.mobile-open]="menuOpen">
+
+    <li>
+      <a href="#hero"
+         [class.active]="activeSection==='hero'"
+         (click)="closeMenu()">Home</a>
+    </li>
+
+    <li>
+      <a href="#about"
+         [class.active]="activeSection==='about'"
+         (click)="closeMenu()">About</a>
+    </li>
+
+    <li>
+      <a href="#skills"
+         [class.active]="activeSection==='skills'"
+         (click)="closeMenu()">Skills</a>
+    </li>
+
+    <li>
+      <a href="#experience"
+         [class.active]="activeSection==='experience'"
+         (click)="closeMenu()">Experience</a>
+    </li>
+
+    <li>
+      <a href="#projects"
+         [class.active]="activeSection==='projects'"
+         (click)="closeMenu()">Projects</a>
+    </li>
+
+    <li>
+      <a href="#contact"
+         [class.active]="activeSection==='contact'"
+         (click)="closeMenu()">Contact</a>
+    </li>
+
+  </ul>
+
+  <div class="actions">
+
+    <button class="theme-btn"
+            (click)="toggleTheme()">
+
+      {{ isDark ? '☀️' : '🌙' }}
+
+    </button>
+
+    <button class="menu-btn"
+            (click)="toggleMenu()">
+
+      ☰
+
+    </button>
+
+  </div>
+
+</nav>
