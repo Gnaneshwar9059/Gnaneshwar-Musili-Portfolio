@@ -45,14 +45,14 @@ export class ContactComponent {
 
         this.successMessage =  response.message;
 
-       this.model = {
-   name: '',
-  email: '',
-  phone: '',
-  role: '',
-  subject: '',
-  message: ''
-};
+//       //this.model = {
+//   name: '',
+//  email: '',
+//  phone: '',
+//  role: '',
+//  subject: '',
+//  message: ''
+//};
 
         this.sending = false;
       },
