@@ -8,7 +8,7 @@
 
   <form #contactForm="ngForm"
         class="contact-form"
-        (ngSubmit)="sendMessage()">
+        (ngSubmit)="sendMessage(contactForm)">
 
     <!-- Name -->
 
@@ -21,10 +21,10 @@
              #name="ngModel"
              required
              placeholder="Your name"
-             [class.invalid]="name.invalid && (name.touched || contactForm.submitted)" />
+             [class.invalid]="name.invalid && contactForm.submitted" />
 
       <div class="error"
-           *ngIf="name.invalid && (name.touched || contactForm.submitted)">
+           *ngIf="name.invalid && contactForm.submitted">
         Name is required.
       </div>
     </div>
@@ -41,10 +41,10 @@
              required
              email
              placeholder="your@email.com"
-             [class.invalid]="email.invalid && (email.touched || contactForm.submitted)" />
+             [class.invalid]="email.invalid && contactForm.submitted" />
 
       <div class="error"
-           *ngIf="email.invalid && (email.touched || contactForm.submitted)">
+           *ngIf="email.invalid && contactForm.submitted">
 
         <span *ngIf="email.errors?.['required']">
           Email is required.
@@ -90,10 +90,10 @@
              #subject="ngModel"
              required
              placeholder="Opportunity, Collaboration..."
-             [class.invalid]="subject.invalid && (subject.touched || contactForm.submitted)" />
+             [class.invalid]="subject.invalid && contactForm.submitted" />
 
       <div class="error"
-           *ngIf="subject.invalid && (subject.touched || contactForm.submitted)">
+           *ngIf="subject.invalid && contactForm.submitted">
         Subject is required.
       </div>
     </div>
@@ -109,17 +109,17 @@
                 #message="ngModel"
                 required
                 placeholder="Tell me how I can help..."
-                [class.invalid]="message.invalid && (message.touched || contactForm.submitted)">
+                [class.invalid]="message.invalid && contactForm.submitted">
       </textarea>
 
       <div class="error"
-           *ngIf="message.invalid && (message.touched || contactForm.submitted)">
+           *ngIf="message.invalid && contactForm.submitted">
         Message is required.
       </div>
     </div>
 
     <button type="submit"
-            [disabled]="contactForm.invalid || sending">
+            [disabled]="sending">
 
       <span *ngIf="!sending">
         Send Message

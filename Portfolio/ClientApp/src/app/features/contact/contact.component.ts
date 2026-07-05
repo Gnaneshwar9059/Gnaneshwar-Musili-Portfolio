@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 
 import { ContactService } from '../../core/services/contact.service';
 import { ContactRequest } from '../../core/models/contact-request';
@@ -17,13 +17,13 @@ export class ContactComponent {
   private readonly contactService = inject(ContactService);
 
   model: ContactRequest = {
-  name: '',
-  email: '',
-  phone: '',
-  role: '',
-  subject: '',
-  message: ''
-};
+    name: '',
+    email: '',
+    phone: '',
+    role: '',
+    subject: '',
+    message: ''
+  };
 
   sending = false;
 
@@ -31,7 +31,14 @@ export class ContactComponent {
 
   errorMessage = '';
 
-  sendMessage() {
+  sendMessage(form: NgForm) {
+
+    // Guard: don't send if the form is invalid.
+    // (Button is disabled in this case too, but this protects
+    // against submission via Enter key on an input.)
+    if (form.invalid) {
+      return;
+    }
 
     this.sending = true;
 
@@ -41,20 +48,26 @@ export class ContactComponent {
 
     this.contactService.send(this.model).subscribe({
 
-     next: (response) => {
+      next: (response) => {
 
-        this.successMessage =  response.message;
-
-       this.model = {
-   name: '',
-  email: '',
-  phone: '',
-  role: '',
-  subject: '',
-  message: ''
-};
+        this.successMessage = response.message;
 
         this.sending = false;
+
+        const emptyModel: ContactRequest = {
+          name: '',
+          email: '',
+          phone: '',
+          role: '',
+          subject: '',
+          message: ''
+        };
+
+        this.model = emptyModel;
+
+        // Resets values, touched/dirty state, and submitted state
+        // together, so the form visually returns to its initial state.
+        form.resetForm(emptyModel);
       },
 
       error: () => {
