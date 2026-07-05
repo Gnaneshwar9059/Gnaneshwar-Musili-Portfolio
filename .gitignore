@@ -368,3 +368,4 @@ Portfolio/ClientApp/dist/
 Portfolio/ClientApp/.angular/
 Portfolio/ClientApp/.vscode/
 Portfolio/wwwroot/
+**/wwwroot/
