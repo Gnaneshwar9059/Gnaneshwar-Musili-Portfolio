@@ -1,7 +1,8 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
+﻿using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MimeKit;
 
 namespace Portfolio.Infrastructure.Email;
 
@@ -12,78 +13,54 @@ public interface IEmailService
 
 public class EmailService : IEmailService
 {
+    private readonly HttpClient _http;
     private readonly EmailSettings _settings;
+    private readonly ILogger<EmailService> _logger;
 
-    public EmailService(IOptions<EmailSettings> options)
+    public EmailService(
+        HttpClient http,
+        IOptions<EmailSettings> options,
+        ILogger<EmailService> logger)
     {
+        _http = http;
         _settings = options.Value;
+        _logger = logger;
+
+        _http.BaseAddress = new Uri("https://api.resend.com/");
+        _http.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", _settings.ApiKey);
     }
 
     public async Task SendAsync(string subject, string body)
     {
-        try
+        var payload = new
         {
-            var email = new MimeMessage();
+            from = _settings.From,
+            to = new[] { _settings.To },
+            subject,
+            html = body
+        };
 
-            email.From.Add(MailboxAddress.Parse(_settings.From));
-            email.To.Add(MailboxAddress.Parse(_settings.Username));
+        var json = JsonSerializer.Serialize(payload);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            email.Subject = subject;
+        _logger.LogInformation("Sending email via Resend...");
 
-            email.Body = new TextPart("html")
-            {
-                Text = body
-            };
+        var response = await _http.PostAsync("emails", content);
 
-            using var smtp = new SmtpClient();
+        var responseBody = await response.Content.ReadAsStringAsync();
 
-            // Timeout after 10 seconds instead of hanging forever
-            smtp.Timeout = 10000;
-
-            Console.WriteLine("========== EMAIL CONFIG ==========");
-            Console.WriteLine($"HOST: {_settings.Host}");
-            Console.WriteLine($"PORT: {_settings.Port}");
-            Console.WriteLine($"FROM: {_settings.From}");
-            Console.WriteLine($"USER: {_settings.Username}");
-            Console.WriteLine($"PASSWORD EMPTY: {string.IsNullOrWhiteSpace(_settings.Password)}");
-            Console.WriteLine("==================================");
-
-            Console.WriteLine("Connecting to SMTP server...");
-
-            await smtp.ConnectAsync(
-                _settings.Host,
-                _settings.Port,
-                SecureSocketOptions.StartTls);
-
-            Console.WriteLine("Connected successfully.");
-
-            Console.WriteLine("Authenticating...");
-
-            await smtp.AuthenticateAsync(
-                _settings.Username,
-                _settings.Password);
-
-            Console.WriteLine("Authenticated successfully.");
-
-            Console.WriteLine("Sending email...");
-
-            await smtp.SendAsync(email);
-
-            Console.WriteLine("Email sent successfully.");
-
-            Console.WriteLine("Disconnecting...");
-
-            await smtp.DisconnectAsync(true);
-
-            Console.WriteLine("Disconnected successfully.");
-        }
-        catch (Exception ex)
+        if (!response.IsSuccessStatusCode)
         {
-            Console.WriteLine("========== EMAIL ERROR ==========");
-            Console.WriteLine(ex.ToString());
-            Console.WriteLine("=================================");
+            _logger.LogError(
+                "Resend API call failed. Status: {Status}, Body: {Body}",
+                response.StatusCode,
+                responseBody);
 
-            throw;
+            throw new HttpRequestException(
+                $"Resend API returned {response.StatusCode}: {responseBody}");
         }
+
+        _logger.LogInformation("Email sent successfully via Resend.");
     }
 }

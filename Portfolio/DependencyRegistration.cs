@@ -14,7 +14,9 @@ public static class DependencyRegistration
 
         services.AddScoped<IContactService, ContactService>();
 
-        services.AddScoped<IEmailService, EmailService>();
+        // Registers IEmailService with a typed HttpClient
+        // (reuses connections instead of creating a new HttpClient per request)
+        services.AddHttpClient<IEmailService, EmailService>();
 
         return services;
     }
